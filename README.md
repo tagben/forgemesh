@@ -469,10 +469,28 @@ so the only thing to redirect is the chat/LLM backend.
 
 **1. Install a local model server.** [Ollama](https://ollama.com) is the simplest:
 
+**Windows (PowerShell):**
+
 ```powershell
 winget install Ollama.Ollama
 ollama pull qwen2.5:32b-instruct      # ~19 GB — 4o-class reasoning for ontology gen
 ollama pull qwen2.5:14b-instruct      # ~9 GB — fast, for interactive queries
+```
+
+**macOS (Homebrew):**
+
+```bash
+brew install ollama
+ollama pull qwen2.5:32b-instruct
+ollama pull qwen2.5:14b-instruct
+```
+
+**Linux:**
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull qwen2.5:32b-instruct
+ollama pull qwen2.5:14b-instruct
 ```
 
 Ollama serves an OpenAI-compatible API at `http://localhost:11434/v1`. Sizing
@@ -520,15 +538,32 @@ If unset, both passes use `LLM_MODEL`.
 `all-MiniLM-L6-v2` downloads from HuggingFace. Cache it once while online, then
 forbid future fetches:
 
+**Windows (PowerShell):**
+
 ```powershell
 python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 $env:HF_HUB_OFFLINE = "1"
 ```
 
+**macOS and Linux:**
+
+```bash
+python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
+export HF_HUB_OFFLINE=1
+```
+
 **4. Verify the air gap.** A preflight script checks config, the local chat
 endpoint, and the embedding cache without touching the cloud:
 
+**Windows (PowerShell):**
+
 ```powershell
+python scripts/check_local_llm.py .env.local
+```
+
+**macOS and Linux:**
+
+```bash
 python scripts/check_local_llm.py .env.local
 ```
 
